@@ -1,0 +1,82 @@
+/* src/app/globals.css */
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  /* Developer Workspace Colors */
+  --color-workspace-bg: #FAFAFA;
+  --color-workspace-card: #FFFFFF;
+  --color-workspace-text: #111111;
+  --color-workspace-muted: #666666;
+  --color-workspace-accent: #000000;
+  --color-workspace-border: #EAEAEA;
+
+  /* Cyber Defense SOC Colors */
+  --color-soc-bg: #09090B;
+  --color-soc-card: #18181B;
+  --color-soc-text: #F4F4F5;
+  --color-soc-muted: #A1A1AA;
+  --color-soc-accent: #0061FF;
+  --color-soc-border: #27272A;
+  --color-soc-alert: #EF4444;
+  --color-soc-warning: #F59E0B;
+  --color-soc-success: #10B981;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 240 10% 3.9%;
+  }
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-workspace-border);
+  }
+  
+  .soc-mode * {
+    border-color: var(--color-soc-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-workspace-bg);
+    color: var(--color-workspace-text);
+    @apply font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  /* When SOC mode is active */
+  .soc-mode {
+    background-color: var(--color-soc-bg);
+    color: var(--color-soc-text);
+  }
+}
+
+/* Premium Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.soc-mode ::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
