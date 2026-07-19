@@ -5,9 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Replace 'RahulOS' with your exact GitHub repository name
-  basePath: "/RahulOS",
-  assetPrefix: "/RahulOS/",
+  // This MUST match your GitHub repository name exactly
+  basePath: "/Portfolio",
+  assetPrefix: "/Portfolio/",
 };
 
 export default nextConfig;
