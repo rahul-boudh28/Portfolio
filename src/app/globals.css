@@ -5,78 +5,62 @@
   --font-sans: var(--font-inter), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
 
-  /* Developer Workspace Colors */
-  --color-workspace-bg: #FAFAFA;
-  --color-workspace-card: #FFFFFF;
-  --color-workspace-text: #111111;
-  --color-workspace-muted: #666666;
-  --color-workspace-accent: #000000;
-  --color-workspace-border: #EAEAEA;
-
-  /* Cyber Defense SOC Colors */
-  --color-soc-bg: #09090B;
-  --color-soc-card: #18181B;
-  --color-soc-text: #F4F4F5;
-  --color-soc-muted: #A1A1AA;
-  --color-soc-accent: #0061FF;
-  --color-soc-border: #27272A;
-  --color-soc-alert: #EF4444;
-  --color-soc-warning: #F59E0B;
-  --color-soc-success: #10B981;
-}
-
-@layer base {
-  :root {
-    --background: 0 0% 98%;
-    --foreground: 240 10% 3.9%;
-  }
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-  }
+  /* Premium SaaS Dark Palette */
+  --color-bg: #08090A;
+  --color-surface: #101214;
+  --color-card: #181A1D;
+  
+  --color-primary: #4F8EF7;
+  --color-secondary: #18C29C;
+  --color-accent: #8A63FF;
+  
+  --color-danger: #FF5C5C;
+  --color-success: #23D18B;
+  --color-warning: #FFB547;
+  
+  --color-text-main: #FFFFFF;
+  --color-text-muted: #A9B1BA;
+  
+  --color-border: #27272A; /* Subtle borders */
 }
 
 @layer base {
   * {
-    border-color: var(--color-workspace-border);
-  }
-  
-  .soc-mode * {
-    border-color: var(--color-soc-border);
+    border-color: var(--color-border);
+    cursor: none; /* Hide default cursor for our custom animated one */
   }
 
   html {
     scroll-behavior: smooth;
-  }
-
-  body {
-    background-color: var(--color-workspace-bg);
-    color: var(--color-workspace-text);
-    @apply font-sans antialiased;
+    /* Limit max width and center */
+    max-width: 100vw;
     overflow-x: hidden;
   }
 
-  /* When SOC mode is active */
-  .soc-mode {
-    background-color: var(--color-soc-bg);
-    color: var(--color-soc-text);
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-main);
+    @apply font-sans antialiased;
+    overflow-x: hidden;
   }
+}
+
+/* Typography Utilities */
+.heading-premium {
+  @apply font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-text-muted;
 }
 
 /* Premium Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-.soc-mode ::-webkit-scrollbar-thumb {
-  background: #3f3f46;
+  background: var(--color-card);
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--color-text-muted);
 }

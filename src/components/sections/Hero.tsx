@@ -1,141 +1,128 @@
 // src/components/sections/Hero.tsx
 "use client";
 
-import { useThemeStore } from "@/lib/store/themeStore";
 import { motion, Variants } from "framer-motion";
-import { ArrowRight, ShieldCheck, TerminalSquare, Download } from "lucide-react";
+import { ArrowRight, ChevronDown, Code2, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import HeroBackground from "@/components/3d/HeroBackground";
 
 export default function Hero() {
-  const { mode } = useThemeStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const isSoc = mode === "soc";
-
-  // Explicitly typing as 'Variants' from framer-motion solves the TS error
+  // Explicitly typing as 'Variants' and using standard ease strings fixes the TS error
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
     },
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: { 
       opacity: 1, 
       y: 0, 
-      transition: { 
-        duration: 0.6, 
-        // Using a recognized ease string avoids the tuple strictness issue
-        ease: "easeOut" 
-      } 
+      transition: { duration: 0.8, ease: "easeOut" } 
     },
   };
 
   if (!mounted) return null;
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-16">
+    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
       
-      {/* Background Effects */}
-      <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
-        {isSoc ? (
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,97,255,0.05)_0%,transparent_70%)]" />
-        ) : (
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.03)_0%,transparent_70%)]" />
-        )}
-      </div>
+      {/* 3D WebGL Background */}
+      <HeroBackground />
 
-      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+      <div className="max-w-[1200px] mx-auto px-6 relative z-10 w-full flex flex-col items-center text-center">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="flex flex-col items-center"
+          className="flex flex-col items-center w-full"
         >
-          {/* Badge */}
-          <motion.div variants={itemVariants} className="mb-6">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border transition-colors"
-              style={{
-                borderColor: isSoc ? '#27272A' : '#EAEAEA',
-                backgroundColor: isSoc ? '#18181B' : '#FFFFFF',
-                color: isSoc ? 'var(--color-soc-accent)' : 'var(--color-workspace-muted)'
-              }}
-            >
-              {isSoc ? <ShieldCheck className="w-3 h-3" /> : <TerminalSquare className="w-3 h-3" />}
-              {isSoc ? "CEH Certified Security Analyst" : "Software Developer & RPA Specialist"}
-            </span>
+          {/* Status Badge */}
+          <motion.div variants={itemVariants} className="mb-8">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border bg-surface/50 backdrop-blur-md" style={{ borderColor: 'var(--color-border)' }}>
+              <span className="flex h-2 w-2 rounded-full bg-success shadow-[0_0_10px_var(--color-success)] animate-pulse" />
+              <span className="text-xs font-semibold text-text-muted tracking-wide uppercase">
+                Available for New Opportunities
+              </span>
+            </div>
           </motion.div>
 
-          {/* Dynamic Headline */}
+          {/* Massive Typography */}
           <motion.h1 
             variants={itemVariants}
-            className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 transition-colors"
+            className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-8 leading-[1.1] max-w-5xl"
           >
-            {isSoc ? (
-              <>
-                Proactive <span style={{ color: 'var(--color-soc-accent)' }}>Defense.</span> <br />
-                Secure Infrastructure.
-              </>
-            ) : (
-              <>
-                Engineering <span style={{ color: 'var(--color-workspace-muted)' }}>Scalable</span> <br />
-                Software & Automation.
-              </>
-            )}
+            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70">
+              Architecting
+            </span>
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-b from-text-muted to-[#4F8EF7]/50">
+              Software & Security.
+            </span>
           </motion.h1>
 
-          {/* Dynamic Sub-headline */}
+          {/* Sub-headline */}
           <motion.p 
             variants={itemVariants}
-            className="text-lg md:text-xl max-w-2xl mb-10 opacity-80"
+            className="text-lg md:text-xl max-w-2xl mb-12 text-text-muted font-medium leading-relaxed"
           >
-            I am <strong className="font-semibold">Rahul Boudh</strong>. 
-            {isSoc 
-              ? " I secure enterprise networks, monitor vulnerabilities, and build ethical security tools to safeguard digital assets."
-              : " I build intelligent RPA bots, full-stack applications, and scalable system architectures that drive business efficiency."}
+            I am <strong className="text-white">Rahul Boudh</strong>. A hybrid engineer building scalable, high-performance applications and securing enterprise infrastructure against modern threats.
           </motion.p>
 
           {/* Call to Actions */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4">
+          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+            {/* Primary Action */}
             <Link 
               href="#projects"
-              className="flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium transition-transform hover:scale-105 active:scale-95"
-              style={{
-                backgroundColor: isSoc ? 'var(--color-soc-accent)' : 'var(--color-workspace-accent)',
-                color: '#FFFFFF'
-              }}
+              className="group relative flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-sm font-bold bg-primary text-white overflow-hidden transition-transform hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
             >
-              View {isSoc ? "Security Operations" : "Engineering Projects"}
-              <ArrowRight className="w-4 h-4" />
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <Code2 className="w-4 h-4 relative z-10" />
+              <span className="relative z-10">Explore Architecture</span>
             </Link>
             
-            <a 
-              href="/resume.pdf" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium border transition-colors hover:opacity-70"
-              style={{
-                borderColor: isSoc ? '#27272A' : '#EAEAEA',
-                backgroundColor: isSoc ? '#18181B' : '#FFFFFF'
-              }}
+            {/* Secondary Action */}
+            <Link 
+              href="#soc"
+              className="group flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-sm font-bold border bg-surface text-text-main transition-all hover:bg-card hover:border-text-muted w-full sm:w-auto"
+              style={{ borderColor: 'var(--color-border)' }}
             >
-              <Download className="w-4 h-4" />
-              Download Resume
-            </a>
+              <ShieldCheck className="w-4 h-4 text-success group-hover:text-success transition-colors" />
+              <span>Cyber Defense Ops</span>
+            </Link>
           </motion.div>
 
         </motion.div>
       </div>
+
+      {/* Scroll Down Indicator */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-muted cursor-pointer hover:text-white transition-colors"
+        onClick={() => {
+          document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+        }}
+      >
+        <span className="text-[10px] font-mono tracking-widest uppercase">Scroll</span>
+        <motion.div 
+          animate={{ y: [0, 8, 0] }} 
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        >
+          <ChevronDown className="w-4 h-4 opacity-70" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
