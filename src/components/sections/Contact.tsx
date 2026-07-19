@@ -5,7 +5,6 @@ import { useThemeStore } from "@/lib/store/themeStore";
 import { motion } from "framer-motion";
 import { Send, Mail, User, MessageSquare, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import emailjs from '@emailjs/browser';
 import Turnstile from "react-turnstile";
 
 export default function Contact() {
@@ -33,12 +32,10 @@ export default function Contact() {
 
     setStatus("loading");
 
-    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+    const formspreeEndpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
 
-    // Safety check for development environment
-    if (!serviceId || !templateId || !publicKey || serviceId === "your_emailjs_service_id") {
+    // Safety check for development environment if key is missing
+    if (!formspreeEndpoint || formspreeEndpoint === "https://formspree.io/f/your_form_id") {
       setTimeout(() => {
         setStatus("success");
         formRef.current?.reset();
@@ -46,12 +43,35 @@ export default function Contact() {
       return;
     }
 
+    // Gather form data
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("user_name"),
+      email: formData.get("user_email"),
+      message: formData.get("message"),
+      // Formspree can automatically validate Turnstile if configured in their dashboard
+      "cf-turnstile-response": turnstileToken, 
+    };
+
     try {
-      await emailjs.sendForm(serviceId, templateId, formRef.current!, publicKey);
-      setStatus("success");
-      formRef.current?.reset();
+      const response = await fetch(formspreeEndpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        formRef.current?.reset();
+      } else {
+        console.error("Formspree error response:", await response.text());
+        setStatus("error");
+      }
     } catch (error) {
-      console.error("Failed to send email:", error);
+      console.error("Failed to send message:", error);
       setStatus("error");
     }
   };
@@ -182,7 +202,7 @@ export default function Contact() {
               {status === "error" && (
                 <div className="flex items-center gap-2 text-sm text-red-500 justify-center">
                   <AlertCircle className="w-4 h-4" /> 
-                  Something went wrong. Please try again or email me directly.
+                  Something went wrong. Please check your network and try again.
                 </div>
               )}
 
