@@ -3,7 +3,7 @@
 
 import { projectsData } from "@/data/resume";
 import { motion, AnimatePresence } from "framer-motion";
-import { FolderGit2, X, ShieldAlert, Cpu, Activity, ExternalLink, Code2, Layers, Server } from "lucide-react";
+import { FolderGit2, X, ShieldAlert, Activity, ExternalLink, Code2, Layers, Server } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Project } from "@/types/resume";
 
@@ -14,7 +14,6 @@ export default function Projects() {
 
   useEffect(() => {
     setMounted(true);
-    // Lock body scroll when modal is open
     if (selectedProject) {
       document.body.style.overflow = "hidden";
     } else {
@@ -29,7 +28,6 @@ export default function Projects() {
     ? projectsData 
     : projectsData.filter(p => p.category === filter);
 
-  // Helper to generate a unique gradient for each project based on its category
   const getGradient = (category: string) => {
     switch(category) {
       case "Security": return "from-danger/20 to-bg";
@@ -72,7 +70,7 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Projects Grid */}
+        {/* Clean Text-Based Projects Grid */}
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
             {filteredProjects.map((project, index) => (
@@ -84,46 +82,46 @@ export default function Projects() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
                 onClick={() => setSelectedProject(project)}
-                className="group cursor-pointer rounded-2xl border bg-card overflow-hidden transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col h-full relative"
+                className="group cursor-pointer rounded-2xl border bg-surface/30 backdrop-blur-sm transition-all hover:bg-card hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col h-full p-6 relative"
                 style={{ borderColor: 'var(--color-border)' }}
               >
-                {/* Simulated Image / Gradient Mesh Banner */}
-                <div className={`h-32 w-full bg-gradient-to-br ${getGradient(project.category)} relative overflow-hidden border-b`} style={{ borderColor: 'var(--color-border)' }}>
-                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
-                  <div className="absolute top-4 left-4 p-2 rounded-lg bg-bg/50 backdrop-blur border" style={{ borderColor: 'var(--color-border)' }}>
+                {/* Header Icon & Badge inside the card */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="p-2.5 rounded-lg border bg-bg transition-colors group-hover:border-primary/50" style={{ borderColor: 'var(--color-border)' }}>
                     {project.category === "Security" && <ShieldAlert className="w-5 h-5 text-danger" />}
                     {project.category === "Automation" && <Activity className="w-5 h-5 text-primary" />}
                     {(project.category === "Full Stack" || project.category === "AI/ML") && <Layers className="w-5 h-5 text-accent" />}
                   </div>
+                  <span className="text-[10px] font-mono tracking-widest uppercase text-text-muted px-2 py-1 rounded bg-bg border" style={{ borderColor: 'var(--color-border)' }}>
+                    {project.category}
+                  </span>
                 </div>
 
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-xl font-bold mb-2 text-text-main group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-text-muted mb-6 flex-grow line-clamp-2">
-                    {project.shortDescription}
-                  </p>
+                <h3 className="text-xl font-bold mb-3 text-text-main group-hover:text-primary transition-colors">
+                  {project.title}
+                </h3>
+                <p className="text-sm text-text-muted mb-8 flex-grow leading-relaxed line-clamp-3">
+                  {project.shortDescription}
+                </p>
 
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    {project.techStack.slice(0, 3).map(tech => (
-                      <span key={tech} className="text-[10px] font-mono px-2 py-1 rounded bg-surface border text-text-muted" style={{ borderColor: 'var(--color-border)' }}>
-                        {tech}
-                      </span>
-                    ))}
-                    {project.techStack.length > 3 && (
-                      <span className="text-[10px] font-mono px-2 py-1 rounded bg-surface border text-text-muted" style={{ borderColor: 'var(--color-border)' }}>
-                        +{project.techStack.length - 3}
-                      </span>
-                    )}
-                  </div>
+                <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+                  {project.techStack.slice(0, 3).map(tech => (
+                    <span key={tech} className="text-[10px] font-mono px-2 py-1 rounded bg-bg border text-text-muted" style={{ borderColor: 'var(--color-border)' }}>
+                      {tech}
+                    </span>
+                  ))}
+                  {project.techStack.length > 3 && (
+                    <span className="text-[10px] font-mono px-2 py-1 rounded bg-bg border text-text-muted" style={{ borderColor: 'var(--color-border)' }}>
+                      +{project.techStack.length - 3}
+                    </span>
+                  )}
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
 
-        {/* Modal Overlay & Expanded Case Study */}
+        {/* Modal Overlay & Expanded Case Study (Same as before) */}
         <AnimatePresence>
           {selectedProject && (
             <div className="fixed inset-0 z-[100000] flex items-center justify-center p-4 sm:p-6 md:p-12">
@@ -178,15 +176,12 @@ export default function Projects() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    {/* Problem */}
                     <div className="space-y-3">
                       <h4 className="text-sm font-bold uppercase tracking-wider flex items-center gap-2 text-warning">
                         <ShieldAlert className="w-4 h-4" /> The Challenge
                       </h4>
                       <p className="text-text-muted leading-relaxed">{selectedProject.caseStudy.problem}</p>
                     </div>
-                    
-                    {/* Solution */}
                     <div className="space-y-3">
                       <h4 className="text-sm font-bold uppercase tracking-wider flex items-center gap-2 text-success">
                         <Activity className="w-4 h-4" /> The Solution
@@ -195,7 +190,6 @@ export default function Projects() {
                     </div>
                   </div>
 
-                  {/* Architecture Box */}
                   <div className="p-8 rounded-2xl border bg-surface/30 backdrop-blur-sm" style={{ borderColor: 'var(--color-border)' }}>
                     <h4 className="text-lg font-bold mb-6 flex items-center gap-2 text-white">
                       <Server className="w-5 h-5 text-primary" /> Architecture & Security Vectors
@@ -216,7 +210,6 @@ export default function Projects() {
                     </div>
                   </div>
 
-                  {/* Results & Lessons */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div className="space-y-3">
                       <h4 className="text-sm font-bold uppercase tracking-wider text-text-main">Impact & Results</h4>
@@ -228,7 +221,6 @@ export default function Projects() {
                     </div>
                   </div>
 
-                  {/* External Links */}
                   {(selectedProject.githubUrl || selectedProject.liveUrl) && (
                     <div className="pt-8 border-t flex gap-4" style={{ borderColor: 'var(--color-border)' }}>
                       {selectedProject.githubUrl && (
@@ -243,13 +235,11 @@ export default function Projects() {
                       )}
                     </div>
                   )}
-
                 </div>
               </motion.div>
             </div>
           )}
         </AnimatePresence>
-
       </div>
     </section>
   );

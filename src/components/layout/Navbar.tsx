@@ -57,13 +57,13 @@ export default function Navbar() {
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-1 bg-surface/50 border rounded-full px-2 py-1" style={{ borderColor: 'var(--color-border)' }}>
           {navLinks.map((link) => (
-            <Link 
+            <a 
               key={link.name} 
               href={link.href}
               className="px-4 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-text-main hover:bg-card transition-all"
             >
               {link.name}
-            </Link>
+            </a>
           ))}
         </nav>
 

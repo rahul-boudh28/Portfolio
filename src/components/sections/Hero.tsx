@@ -2,8 +2,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { ArrowRight, ChevronDown, Code2, ShieldCheck } from "lucide-react";
-import Link from "next/link";
+import { ChevronDown, Code2, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import HeroBackground from "@/components/3d/HeroBackground";
 
@@ -14,7 +13,6 @@ export default function Hero() {
     setMounted(true);
   }, []);
 
-  // Explicitly typing as 'Variants' and using standard ease strings fixes the TS error
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -25,17 +23,13 @@ export default function Hero() {
 
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { duration: 0.8, ease: "easeOut" } 
-    },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
   };
 
   if (!mounted) return null;
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <section className="relative h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden">
       
       {/* 3D WebGL Background */}
       <HeroBackground />
@@ -79,38 +73,36 @@ export default function Hero() {
             I am <strong className="text-white">Rahul Boudh</strong>. A hybrid engineer building scalable, high-performance applications and securing enterprise infrastructure against modern threats.
           </motion.p>
 
-          {/* Call to Actions */}
+          {/* Call to Actions - Using normal anchor tags for smooth scrolling */}
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            {/* Primary Action */}
-            <Link 
+            <a 
               href="#projects"
               className="group relative flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-sm font-bold bg-primary text-white overflow-hidden transition-transform hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
             >
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
               <Code2 className="w-4 h-4 relative z-10" />
               <span className="relative z-10">Explore Architecture</span>
-            </Link>
+            </a>
             
-            {/* Secondary Action */}
-            <Link 
+            <a 
               href="#soc"
               className="group flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-sm font-bold border bg-surface text-text-main transition-all hover:bg-card hover:border-text-muted w-full sm:w-auto"
               style={{ borderColor: 'var(--color-border)' }}
             >
               <ShieldCheck className="w-4 h-4 text-success group-hover:text-success transition-colors" />
               <span>Cyber Defense Ops</span>
-            </Link>
+            </a>
           </motion.div>
 
         </motion.div>
       </div>
 
-      {/* Scroll Down Indicator */}
+      {/* Scroll Down Indicator - Securely pinned to bottom absolute */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-muted cursor-pointer hover:text-white transition-colors"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-muted cursor-pointer hover:text-white transition-colors z-20"
         onClick={() => {
           document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
         }}
