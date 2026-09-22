@@ -22,12 +22,12 @@
   --color-border: #27272A;
 }
 
+/* src/app/globals.css (Excerpt) */
 @layer base {
   * {
     border-color: var(--color-border);
   }
 
-  /* Only hide the default cursor on devices that actually have a precision mouse */
   @media (pointer: fine) {
     * {
       cursor: none !important;
@@ -38,13 +38,14 @@
     scroll-behavior: smooth !important;
     background-color: var(--color-bg);
     color: var(--color-text-main);
-    overflow-x: hidden;
+    /* overflow-x: clip preserves smooth-scroll while preventing horizontal scrollbar leaks */
+    overflow-x: clip;
   }
 
   body {
     background-color: var(--color-bg);
     color: var(--color-text-main);
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 }
 
