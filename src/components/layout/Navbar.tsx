@@ -42,7 +42,7 @@ export default function Navbar() {
 
   return (
     <motion.header 
-      className="fixed top-0 left-0 w-full z-50 transition-all duration-300"
+      className="fixed top-0 left-0 w-full z-50 transition-all duration-300 no-print"
       style={{
         backgroundColor: scrolled ? "rgba(8, 9, 10, 0.85)" : "transparent",
         backdropFilter: scrolled ? "blur(16px)" : "none",

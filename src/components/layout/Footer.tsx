@@ -14,7 +14,8 @@ export default function Footer() {
   if (!mounted) return null;
 
   return (
-    <footer className="w-full border-t border-border py-12 bg-[#060709] text-text-muted">
+    <footer className="w-full border-t border-border py-12 bg-[#060709] text-text-muted no-print" 
+      style={{ borderColor: 'var(--color-border)' }}>
       <div className="max-w-[1440px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
         
         {/* Brand & Version Badge */}
