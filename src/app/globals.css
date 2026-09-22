@@ -66,18 +66,37 @@
 }
 
 /* Print Rules for 1-Click ATS PDF Export */
+/* src/app/globals.css (Bottom of file) */
 @media print {
-  body {
-    background-color: #ffffff !important;
-    color: #000000 !important;
+  /* Enforce A4 dimensions and clean margins */
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
   }
-  header, footer, nav, button, .cursor-none, [role="status"] {
+
+  /* Force browser to preserve exact borders, backgrounds, and fonts */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide only the site navbar, footer, and interactive buttons - NOT the resume header */
+  .no-print,
+  nav,
+  button,
+  .cursor-none,
+  header.fixed {
     display: none !important;
   }
-  main {
-    box-shadow: none !important;
-    border: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
+
+  body {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  /* Prevent awkward page break cuts across experience or skills */
+  section, .resume-section, li {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 }
