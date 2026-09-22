@@ -54,10 +54,11 @@ export default function Navbar() {
         borderBottom: scrolled ? "1px solid var(--color-border)" : "1px solid transparent"
       }}
     >
-      <div className="max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between gap-4">
+      {/* Relative container ensures the absolute nav is anchored to the true header center */}
+      <div className="relative max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between">
         
-        {/* Left: Brand */}
-        <div className="flex items-center gap-4">
+        {/* Left: Brand + Telemetry */}
+        <div className="flex items-center gap-4 z-10">
           <Link href="/" className="flex items-center gap-2 group">
             <div className="p-1.5 rounded-lg bg-surface border border-border group-hover:border-primary transition-colors">
               <Terminal className="w-4 h-4 text-primary" />
@@ -75,31 +76,33 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Center: Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1 bg-surface/60 border border-border rounded-full px-2 py-1 backdrop-blur-md">
+        {/* Center: Desktop Nav Pill (True Viewport Centered via absolute positioning) */}
+        <nav className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 bg-surface/70 border border-border rounded-full px-2.5 py-1 backdrop-blur-md z-10 shadow-lg pointer-events-auto">
           {navLinks.map((link) => (
             <button 
-              key={link.name} 
+              key={link.targetId} 
               onClick={() => navigateToSection(link.targetId, pathname, router)}
-              className="px-3.5 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-white hover:bg-card transition-all"
+              className="px-3.5 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-white hover:bg-card transition-all cursor-pointer whitespace-nowrap"
             >
               {link.name}
             </button>
           ))}
         </nav>
 
-        {/* Right: Command Trigger */}
-        <button
-          onClick={() => setCommandOpen(true)}
-          className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-card transition-colors text-text-muted hover:text-white group"
-        >
-          <Search className="w-3.5 h-3.5 group-hover:text-primary transition-colors" />
-          <span className="text-xs hidden sm:inline">Search</span>
-          <div className="hidden sm:flex items-center gap-0.5 ml-1">
-            <kbd className="px-1.5 py-0.5 rounded bg-bg border border-border text-[10px] font-mono">⌘</kbd>
-            <kbd className="px-1.5 py-0.5 rounded bg-bg border border-border text-[10px] font-mono">K</kbd>
-          </div>
-        </button>
+        {/* Right: Search / Command Trigger */}
+        <div className="flex items-center z-10">
+          <button
+            onClick={() => setCommandOpen(true)}
+            className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-card transition-colors text-text-muted hover:text-white group cursor-pointer"
+          >
+            <Search className="w-3.5 h-3.5 group-hover:text-primary transition-colors" />
+            <span className="text-xs hidden sm:inline">Search</span>
+            <div className="hidden sm:flex items-center gap-0.5 ml-1">
+              <kbd className="px-1.5 py-0.5 rounded bg-bg border border-border text-[10px] font-mono">⌘</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-bg border border-border text-[10px] font-mono">K</kbd>
+            </div>
+          </button>
+        </div>
 
       </div>
     </motion.header>

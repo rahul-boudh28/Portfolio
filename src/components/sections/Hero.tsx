@@ -14,9 +14,9 @@ export default function Hero() {
     setMounted(true);
   }, []);
 
-  const handleSectionScroll = (e: React.MouseEvent, targetId: string) => {
+  const handleHeroNavigation = (e: React.MouseEvent, targetId: string) => {
     e.preventDefault();
-    smoothScrollToElement(targetId);
+    smoothScrollToElement(targetId, true);
   };
 
   const containerVariants: Variants = {
@@ -37,6 +37,7 @@ export default function Hero() {
   return (
     <section className="relative min-h-[92vh] w-full flex flex-col justify-between items-center pt-24 pb-8 overflow-hidden">
       
+      {/* 3D WebGL Background */}
       <HeroBackground />
 
       <div />
@@ -48,7 +49,7 @@ export default function Hero() {
           animate="visible"
           className="flex flex-col items-center w-full"
         >
-          {/* SEO Targeted Badge */}
+          {/* Badge */}
           <motion.div variants={itemVariants} className="mb-6">
             <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-border bg-surface/70 backdrop-blur-md">
               <Award className="w-3.5 h-3.5 text-primary" />
@@ -78,21 +79,21 @@ export default function Hero() {
             Engineering scalable Python RPA platforms, building resilient full-stack architectures, and securing enterprise infrastructure against emerging attack vectors.
           </motion.p>
 
-          {/* Buttons with Window-Level Smooth Scroll */}
+          {/* Buttons with Easing-based Smooth Scroll */}
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            {/* Button 1: Explore Architecture */}
+            {/* Button 1: Explore Architecture -> #workspace */}
             <button
-              onClick={(e) => handleSectionScroll(e, "workspace")}
-              className="group relative flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold bg-primary text-white overflow-hidden transition-all hover:shadow-[0_0_25px_rgba(79,142,247,0.4)] active:scale-95 w-full sm:w-auto"
+              onClick={(e) => handleHeroNavigation(e, "workspace")}
+              className="group relative flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold bg-primary text-white overflow-hidden transition-all hover:shadow-[0_0_25px_rgba(79,142,247,0.4)] active:scale-95 w-full sm:w-auto cursor-pointer"
             >
               <Code2 className="w-4 h-4" />
               <span>Explore Architecture</span>
             </button>
             
-            {/* Button 2: Cyber Defense Ops */}
+            {/* Button 2: Cyber Defense Ops -> #soc */}
             <button
-              onClick={(e) => handleSectionScroll(e, "soc")}
-              className="group flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold border border-border bg-surface/80 text-text-main transition-all hover:bg-card hover:border-text-muted active:scale-95 w-full sm:w-auto"
+              onClick={(e) => handleHeroNavigation(e, "soc")}
+              className="group flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold border border-border bg-surface/80 text-text-main transition-all hover:bg-card hover:border-text-muted active:scale-95 w-full sm:w-auto cursor-pointer"
             >
               <ShieldCheck className="w-4 h-4 text-success" />
               <span>Cyber Defense Ops</span>
@@ -102,13 +103,13 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Button 3: System Flow Down Arrow */}
+      {/* Button 3: System Flow Down Arrow -> #about */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 0.8 }}
         className="relative z-10 pt-8 flex flex-col items-center gap-1.5 text-text-muted cursor-pointer hover:text-white transition-colors"
-        onClick={(e) => handleSectionScroll(e, "about")}
+        onClick={(e) => handleHeroNavigation(e, "about")}
       >
         <span className="text-[10px] font-mono tracking-widest uppercase opacity-60">System Flow</span>
         <motion.div 

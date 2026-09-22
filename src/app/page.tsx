@@ -14,37 +14,45 @@ import { smoothScrollToElement } from "@/lib/utils/navigation";
 
 export default function Home() {
   useEffect(() => {
-    // Detect incoming cross-page hashes (e.g., from /resume navigating to /#about)
-    if (typeof window !== "undefined" && window.location.hash) {
-      const targetId = window.location.hash.replace("#", "");
-      setTimeout(() => {
-        smoothScrollToElement(targetId);
-      }, 200);
-    }
+    if (typeof window === "undefined") return;
+
+    const handleInitialHash = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const targetId = hash.replace("#", "");
+        setTimeout(() => {
+          smoothScrollToElement(targetId, false);
+        }, 180);
+      }
+    };
+
+    handleInitialHash();
+    window.addEventListener("popstate", handleInitialHash);
+    return () => window.removeEventListener("popstate", handleInitialHash);
   }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
       <Hero />
-      <div id="about" className="scroll-mt-24">
+      <div className="scroll-mt-20">
         <About />
       </div>
-      <div id="workspace" className="scroll-mt-24">
+      <div className="scroll-mt-20">
         <Workspace />
       </div>
-      <div id="soc" className="scroll-mt-24">
+      <div className="scroll-mt-20">
         <SOC />
       </div>
-      <div id="projects" className="scroll-mt-24">
+      <div className="scroll-mt-20">
         <Projects />
       </div>
-      <div id="skills" className="scroll-mt-24">
+      <div className="scroll-mt-20">
         <Skills />
       </div>
-      <div id="experience" className="scroll-mt-24">
+      <div className="scroll-mt-20">
         <Experience />
       </div>
-      <div id="contact" className="scroll-mt-24">
+      <div className="scroll-mt-20">
         <Contact />
       </div>
     </div>
