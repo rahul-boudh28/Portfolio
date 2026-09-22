@@ -11,7 +11,6 @@ export default function AnimatedCursor() {
   const [isTouchDevice, setIsTouchDevice] = useState(true);
 
   useEffect(() => {
-    // Disable on touchscreens
     if (window.matchMedia("(pointer: coarse)").matches) {
       return;
     }
@@ -24,7 +23,13 @@ export default function AnimatedCursor() {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.closest("a") || target.closest("button") || target.closest("input") || target.closest("textarea")) {
+      if (
+        target.closest("a") || 
+        target.closest("button") || 
+        target.closest("input") || 
+        target.closest("textarea") ||
+        target.closest("[role='button']")
+      ) {
         setIsHovering(true);
       } else {
         setIsHovering(false);
@@ -51,9 +56,9 @@ export default function AnimatedCursor() {
 
   return (
     <>
-      {/* High-precision center dot */}
+      {/* Precision Center Dot - Maximum possible z-index */}
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-primary rounded-full pointer-events-none z-[99999]"
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-primary rounded-full pointer-events-none z-[2147483647]"
         animate={{
           x: mousePosition.x - 3,
           y: mousePosition.y - 3,
@@ -61,17 +66,17 @@ export default function AnimatedCursor() {
         }}
         transition={{ type: "tween", ease: "backOut", duration: 0.05 }}
       />
-      {/* Outer smoothing ring */}
+      {/* Outer Halo - Maximum possible z-index */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[99998] border border-primary/50"
+        className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[2147483646] border border-primary/60"
         animate={{
           x: mousePosition.x - 16,
           y: mousePosition.y - 16,
           scale: isHovering ? 1.6 : 1,
-          backgroundColor: isHovering ? "rgba(79, 142, 247, 0.15)" : "rgba(0, 0, 0, 0)",
-          borderColor: isHovering ? "rgba(79, 142, 247, 0.9)" : "rgba(79, 142, 247, 0.4)",
+          backgroundColor: isHovering ? "rgba(79, 142, 247, 0.2)" : "rgba(0, 0, 0, 0)",
+          borderColor: isHovering ? "rgba(79, 142, 247, 1)" : "rgba(79, 142, 247, 0.4)",
         }}
-        transition={{ type: "spring", stiffness: 250, damping: 20, mass: 0.3 }}
+        transition={{ type: "spring", stiffness: 300, damping: 22, mass: 0.25 }}
       />
     </>
   );

@@ -8,6 +8,7 @@ import LoadingScreen from "@/components/ui/LoadingScreen";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CommandPalette from "@/components/ui/CommandPalette";
+import ClientSecurityGuard from "@/components/security/ClientSecurityGuard";
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -93,6 +94,8 @@ export const metadata: Metadata = {
   },
 };
 
+
+
 // Structured Schema Markup for Google Knowledge Graph
 const jsonLd = {
   "@context": "https://schema.org",
@@ -142,7 +145,7 @@ const jsonLd = {
   ],
   sameAs: [
     "https://github.com/rahul-boudh28",
-    "https://linkedin.com",
+    "https://www.linkedin.com/in/rahul-boudh",
   ],
 };
 
@@ -154,13 +157,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
-        {/* Injecting Structured JSON-LD directly into DOM */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className="min-h-screen flex flex-col font-sans antialiased text-text-main bg-bg selection:bg-primary selection:text-white"> 
+        <ClientSecurityGuard /> {/* 👈 Injected here */}
         <LoadingScreen />
         <AnimatedCursor />
         <Navbar />

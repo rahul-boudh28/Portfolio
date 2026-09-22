@@ -21,6 +21,17 @@ export default function Projects() {
     }
   }, [selectedProject]);
 
+  // Handle ESC key to dismiss modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && selectedProject) {
+        setSelectedProject(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedProject]);
+
   if (!mounted) return null;
 
   const categories = ["All", "Automation", "Security", "Full Stack"];
@@ -44,12 +55,14 @@ export default function Projects() {
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-16">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-surface/50 mb-6" style={{ borderColor: 'var(--color-border)' }}>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-surface/50 mb-6">
               <FolderGit2 className="w-4 h-4 text-primary" />
               <span className="text-xs font-mono font-bold text-text-muted uppercase tracking-wider">Module 03: Architecture</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Engineering Case Studies</h2>
-            <p className="text-text-muted max-w-2xl mx-auto text-lg">Detailed breakdowns of system architectures, security implementations, and scalable automation solutions.</p>
+            <p className="text-text-muted max-w-2xl mx-auto text-lg">
+              Detailed breakdowns of system architectures, security implementations, and scalable automation solutions.
+            </p>
           </motion.div>
         </div>
 
@@ -61,8 +74,8 @@ export default function Projects() {
               onClick={() => setFilter(cat)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                 filter === cat 
-                  ? 'bg-text-main text-bg border-text-main shadow-[0_0_15px_rgba(255,255,255,0.2)]' 
-                  : 'bg-surface text-text-muted hover:text-text-main border-[var(--color-border)] hover:border-text-muted'
+                  ? "bg-text-main text-bg border-text-main shadow-[0_0_15px_rgba(255,255,255,0.2)]" 
+                  : "bg-surface text-text-muted hover:text-text-main border-border hover:border-text-muted"
               }`}
             >
               {cat}
@@ -73,26 +86,25 @@ export default function Projects() {
         {/* Clean Text-Based Projects Grid */}
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
-            {filteredProjects.map((project, index) => (
+            {filteredProjects.map((project) => (
               <motion.div
                 layoutId={`card-${project.id}`}
                 key={project.id}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.25 }}
                 onClick={() => setSelectedProject(project)}
-                className="group cursor-pointer rounded-2xl border bg-surface/30 backdrop-blur-sm transition-all hover:bg-card hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col h-full p-6 relative"
-                style={{ borderColor: 'var(--color-border)' }}
+                className="group cursor-pointer rounded-2xl border border-border bg-surface/30 backdrop-blur-sm transition-all hover:bg-card hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col h-full p-6 relative"
               >
-                {/* Header Icon & Badge inside the card */}
+                {/* Header Icon & Badge */}
                 <div className="flex items-center justify-between mb-6">
-                  <div className="p-2.5 rounded-lg border bg-bg transition-colors group-hover:border-primary/50" style={{ borderColor: 'var(--color-border)' }}>
+                  <div className="p-2.5 rounded-lg border border-border bg-bg transition-colors group-hover:border-primary/50">
                     {project.category === "Security" && <ShieldAlert className="w-5 h-5 text-danger" />}
                     {project.category === "Automation" && <Activity className="w-5 h-5 text-primary" />}
                     {(project.category === "Full Stack" || project.category === "AI/ML") && <Layers className="w-5 h-5 text-accent" />}
                   </div>
-                  <span className="text-[10px] font-mono tracking-widest uppercase text-text-muted px-2 py-1 rounded bg-bg border" style={{ borderColor: 'var(--color-border)' }}>
+                  <span className="text-[10px] font-mono tracking-widest uppercase text-text-muted px-2 py-1 rounded bg-bg border border-border">
                     {project.category}
                   </span>
                 </div>
@@ -104,14 +116,14 @@ export default function Projects() {
                   {project.shortDescription}
                 </p>
 
-                <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+                <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-border">
                   {project.techStack.slice(0, 3).map(tech => (
-                    <span key={tech} className="text-[10px] font-mono px-2 py-1 rounded bg-bg border text-text-muted" style={{ borderColor: 'var(--color-border)' }}>
+                    <span key={tech} className="text-[10px] font-mono px-2 py-1 rounded bg-bg border border-border text-text-muted">
                       {tech}
                     </span>
                   ))}
                   {project.techStack.length > 3 && (
-                    <span className="text-[10px] font-mono px-2 py-1 rounded bg-bg border text-text-muted" style={{ borderColor: 'var(--color-border)' }}>
+                    <span className="text-[10px] font-mono px-2 py-1 rounded bg-bg border border-border text-text-muted">
                       +{project.techStack.length - 3}
                     </span>
                   )}
@@ -121,38 +133,42 @@ export default function Projects() {
           </AnimatePresence>
         </motion.div>
 
-        {/* Modal Overlay & Expanded Case Study (Same as before) */}
+        {/* Modal Overlay (z-index is lower than custom cursor) */}
         <AnimatePresence>
           {selectedProject && (
-            <div className="fixed inset-0 z-[100000] flex items-center justify-center p-4 sm:p-6 md:p-12">
+            <div className="fixed inset-0 z-[99990] flex items-center justify-center p-4 sm:p-6 md:p-12">
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setSelectedProject(null)}
-                className="absolute inset-0 bg-bg/80 backdrop-blur-md"
+                className="absolute inset-0 bg-bg/85 backdrop-blur-md"
               />
               
               <motion.div
                 layoutId={`card-${selectedProject.id}`}
-                className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl flex flex-col bg-bg border"
-                style={{ borderColor: 'var(--color-border)' }}
+                className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl flex flex-col bg-bg border border-border z-10"
               >
                 {/* Modal Header Banner */}
-                <div className={`relative h-48 md:h-64 w-full bg-gradient-to-br ${getGradient(selectedProject.category)} border-b flex items-end p-8`} style={{ borderColor: 'var(--color-border)' }}>
-                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none" />
+                <div className={`relative h-44 md:h-56 w-full bg-gradient-to-br ${getGradient(selectedProject.category)} border-b border-border flex items-end p-8`}>
                   
-                  <button 
-                    onClick={() => setSelectedProject(null)}
-                    className="absolute top-6 right-6 p-2 rounded-full bg-bg/50 backdrop-blur border text-text-muted hover:text-white transition-colors"
-                    style={{ borderColor: 'var(--color-border)' }}
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
+                  {/* Close button with ESC indicator */}
+                  <div className="absolute top-6 right-6 flex items-center gap-2">
+                    <span className="text-[10px] font-mono text-text-muted border border-border px-2 py-1 rounded bg-bg/60 hidden sm:inline">
+                      ESC
+                    </span>
+                    <button 
+                      onClick={() => setSelectedProject(null)}
+                      className="p-2 rounded-full bg-bg/70 backdrop-blur border border-border text-text-muted hover:text-white transition-colors"
+                      aria-label="Close modal"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
 
                   <div className="relative z-10">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-bg/50 backdrop-blur border text-text-main uppercase tracking-wider" style={{ borderColor: 'var(--color-border)' }}>
+                      <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-bg/60 backdrop-blur border border-border text-text-main uppercase tracking-wider">
                         {selectedProject.category}
                       </span>
                     </div>
@@ -160,15 +176,13 @@ export default function Projects() {
                   </div>
                 </div>
 
-                {/* Modal Body - Case Study Layout */}
+                {/* Modal Body */}
                 <div className="p-6 md:p-10 space-y-12">
-                  
-                  {/* Tech Stack Bubbles */}
                   <div>
                     <h4 className="text-xs font-mono text-text-muted uppercase tracking-wider mb-4">Technologies Deployed</h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedProject.techStack.map(tech => (
-                        <span key={tech} className="text-sm font-medium px-3 py-1.5 rounded-lg border bg-surface text-text-main shadow-sm" style={{ borderColor: 'var(--color-border)' }}>
+                        <span key={tech} className="text-sm font-medium px-3 py-1.5 rounded-lg border border-border bg-surface text-text-main shadow-sm">
                           {tech}
                         </span>
                       ))}
@@ -190,7 +204,7 @@ export default function Projects() {
                     </div>
                   </div>
 
-                  <div className="p-8 rounded-2xl border bg-surface/30 backdrop-blur-sm" style={{ borderColor: 'var(--color-border)' }}>
+                  <div className="p-8 rounded-2xl border border-border bg-surface/30 backdrop-blur-sm">
                     <h4 className="text-lg font-bold mb-6 flex items-center gap-2 text-white">
                       <Server className="w-5 h-5 text-primary" /> Architecture & Security Vectors
                     </h4>
@@ -222,9 +236,9 @@ export default function Projects() {
                   </div>
 
                   {(selectedProject.githubUrl || selectedProject.liveUrl) && (
-                    <div className="pt-8 border-t flex gap-4" style={{ borderColor: 'var(--color-border)' }}>
+                    <div className="pt-8 border-t border-border flex gap-4">
                       {selectedProject.githubUrl && (
-                        <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-surface border text-sm font-semibold hover:bg-card transition-colors text-white" style={{ borderColor: 'var(--color-border)' }}>
+                        <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 rounded-xl bg-surface border border-border text-sm font-semibold hover:bg-card transition-colors text-white">
                           <Code2 className="w-4 h-4" /> View Source
                         </a>
                       )}
