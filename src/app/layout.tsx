@@ -157,25 +157,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
-        {/* Raw Source Security Easter Egg for view-source */}
+        {/* Strict Content Security Policy (CSP) */}
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://api.ipify.org https://formspree.io https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com; object-src 'none'; base-uri 'self';"
+        />
         <script
           dangerouslySetInnerHTML={{
-            __html: `
-/*
- ====================================================================
-  [!] RAHULOS SECURITY PROTOCOL ACTIVE
- ====================================================================
-  Operator: Rahul Boudh (Certified Ethical Hacker / Software Developer)
-  Target Host: https://rahul-boudh28.github.io/Portfolio/
-  Clearance: EC-Council CEH Validated
-  Status: Client Hardened • Source Minified • Secrets Sanitized
- ====================================================================
-  Notice: This static bundle is public by design. All backend business
-  logic, proprietary bots, and sensitive endpoints are safeguarded
-  behind strict perimeter access controls.
- ====================================================================
-*/
-            `,
+            __html: `/* [!] RAHULOS CLIENT HARDENED • CEH VERIFIED */`,
           }}
         />
         <script
@@ -184,12 +173,13 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col font-sans antialiased text-text-main bg-bg selection:bg-primary selection:text-white"> 
-        <ClientSecurityGuard /> {/* 👈 Injected here */}
+        <ClientSecurityGuard />
         <LoadingScreen />
         <AnimatedCursor />
         <Navbar />
         <CommandPalette />
-        <main className="flex-grow w-full max-w-[1440px] mx-auto overflow-hidden pt-16">
+        {/* Removed overflow-hidden so window.scrollTo smooth scrolling is never trapped */}
+        <main className="flex-grow w-full max-w-[1440px] mx-auto pt-16">
           {children}
         </main>
         <Footer />

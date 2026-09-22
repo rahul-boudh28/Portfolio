@@ -22,7 +22,6 @@
   --color-border: #27272A;
 }
 
-/* src/app/globals.css (Excerpt) */
 @layer base {
   * {
     border-color: var(--color-border);
@@ -38,7 +37,6 @@
     scroll-behavior: smooth !important;
     background-color: var(--color-bg);
     color: var(--color-text-main);
-    /* overflow-x: clip preserves smooth-scroll while preventing horizontal scrollbar leaks */
     overflow-x: clip;
   }
 
@@ -46,6 +44,19 @@
     background-color: var(--color-bg);
     color: var(--color-text-main);
     overflow-x: clip;
+    /* Deter casual scraping while keeping inputs & code accessible */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Explicitly allow selection on inputs, textareas, code blocks, and resume content */
+  input,
+  textarea,
+  pre,
+  code,
+  .selectable-text {
+    -webkit-user-select: text !important;
+    user-select: text !important;
   }
 }
 
@@ -66,21 +77,17 @@
 }
 
 /* Print Rules for 1-Click ATS PDF Export */
-/* src/app/globals.css (Bottom of file) */
-/* src/app/globals.css (Replace @media print at the bottom) */
 @media print {
   @page {
     size: A4 portrait;
-    margin: 10mm 12mm;
+    margin: 8mm 10mm;
   }
 
-  /* Force print color fidelity */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* 🚫 COMPLETELY REMOVE WEBSITE FOOTER, NAVBAR & BUTTONS FROM PDF */
   footer,
   header,
   nav,
@@ -95,13 +102,14 @@
     margin: 0 !important;
   }
 
-  /* Pure white background & high-contrast text for ATS PDF */
   body, html {
     background-color: #ffffff !important;
     color: #111827 !important;
     padding: 0 !important;
     margin: 0 !important;
     overflow: visible !important;
+    -webkit-user-select: text !important;
+    user-select: text !important;
   }
 
   main {
@@ -112,7 +120,6 @@
     border: none !important;
   }
 
-  /* Prevent sections from splitting awkwardly across pages */
   section, .resume-section, li {
     break-inside: avoid !important;
     page-break-inside: avoid !important;

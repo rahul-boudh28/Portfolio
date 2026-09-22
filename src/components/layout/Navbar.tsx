@@ -6,6 +6,8 @@ import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Terminal, Search, Activity } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { navigateToSection } from "@/lib/utils/navigation";
 
 export default function Navbar() {
   const { setCommandOpen } = useUIStore();
@@ -13,6 +15,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [time, setTime] = useState("");
   const { scrollY } = useScroll();
+  const router = useRouter();
+  const pathname = usePathname();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 20);
@@ -30,12 +34,12 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "About", href: "#about" },
-    { name: "Workspace", href: "#workspace" },
-    { name: "SOC", href: "#soc" },
-    { name: "Projects", href: "#projects" },
-    { name: "Experience", href: "#experience" },
-    { name: "Contact", href: "#contact" },
+    { name: "About", targetId: "about" },
+    { name: "Workspace", targetId: "workspace" },
+    { name: "SOC", targetId: "soc" },
+    { name: "Projects", targetId: "projects" },
+    { name: "Experience", targetId: "experience" },
+    { name: "Contact", targetId: "contact" },
   ];
 
   if (!mounted) return null;
@@ -52,7 +56,7 @@ export default function Navbar() {
     >
       <div className="max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between gap-4">
         
-        {/* Left: Brand + Realtime Ticker */}
+        {/* Left: Brand */}
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2 group">
             <div className="p-1.5 rounded-lg bg-surface border border-border group-hover:border-primary transition-colors">
@@ -74,17 +78,17 @@ export default function Navbar() {
         {/* Center: Desktop Nav */}
         <nav className="hidden md:flex items-center gap-1 bg-surface/60 border border-border rounded-full px-2 py-1 backdrop-blur-md">
           {navLinks.map((link) => (
-            <a 
+            <button 
               key={link.name} 
-              href={link.href}
+              onClick={() => navigateToSection(link.targetId, pathname, router)}
               className="px-3.5 py-1.5 rounded-full text-xs font-medium text-text-muted hover:text-white hover:bg-card transition-all"
             >
               {link.name}
-            </a>
+            </button>
           ))}
         </nav>
 
-        {/* Right: Command Palette Trigger */}
+        {/* Right: Command Trigger */}
         <button
           onClick={() => setCommandOpen(true)}
           className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-card transition-colors text-text-muted hover:text-white group"

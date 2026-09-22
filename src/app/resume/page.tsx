@@ -75,7 +75,7 @@ export default function ResumePage() {
       </div>
 
       {/* 📄 MASTER ATS RESUME SHEET 📄 */}
-      <main className="max-w-[900px] mx-auto p-8 sm:p-12 rounded-2xl border border-border bg-[#0B0C0E] shadow-2xl print:max-w-full print:p-0 print:border-none print:bg-white print:text-black print:shadow-none">
+      <main className="selectable-text max-w-[900px] mx-auto p-8 sm:p-12 rounded-2xl border border-border bg-[#0B0C0E] shadow-2xl print:max-w-full print:p-0 print:border-none print:bg-white print:text-black print:shadow-none">
         
         {/* 1. CONTACT & IDENTITY HEADER (Protected from being hidden in print) */}
         <div className="border-b border-border pb-6 mb-6 print:border-black/30 print:pb-4 print:mb-4">

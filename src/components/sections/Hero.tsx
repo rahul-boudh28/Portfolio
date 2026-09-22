@@ -5,6 +5,7 @@ import { motion, Variants } from "framer-motion";
 import { ChevronDown, Code2, ShieldCheck, Award } from "lucide-react";
 import { useEffect, useState } from "react";
 import HeroBackground from "@/components/3d/HeroBackground";
+import { smoothScrollToElement } from "@/lib/utils/navigation";
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -13,13 +14,9 @@ export default function Hero() {
     setMounted(true);
   }, []);
 
-  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement | HTMLDivElement>, targetId: string) => {
+  const handleSectionScroll = (e: React.MouseEvent, targetId: string) => {
     e.preventDefault();
-    const elem = document.getElementById(targetId);
-    if (elem) {
-      elem.scrollIntoView({ behavior: "smooth", block: "start" });
-      window.history.pushState(null, "", `#${targetId}`);
-    }
+    smoothScrollToElement(targetId);
   };
 
   const containerVariants: Variants = {
@@ -40,7 +37,6 @@ export default function Hero() {
   return (
     <section className="relative min-h-[92vh] w-full flex flex-col justify-between items-center pt-24 pb-8 overflow-hidden">
       
-      {/* 3D Interactive WebGL Starfield */}
       <HeroBackground />
 
       <div />
@@ -62,7 +58,7 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Primary Semantic H1 Tag */}
+          {/* Heading */}
           <motion.h1 
             variants={itemVariants}
             className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-6 leading-[1.08] max-w-5xl"
@@ -74,7 +70,7 @@ export default function Hero() {
             </span>
           </motion.h1>
 
-          {/* Sub-Headline */}
+          {/* Subtext */}
           <motion.p 
             variants={itemVariants}
             className="text-base sm:text-lg md:text-xl max-w-2xl mb-10 text-text-muted font-normal leading-relaxed"
@@ -82,27 +78,25 @@ export default function Hero() {
             Engineering scalable Python RPA platforms, building resilient full-stack architectures, and securing enterprise infrastructure against emerging attack vectors.
           </motion.p>
 
-          {/* Button Row with Infallible Smooth Scroll */}
+          {/* Buttons with Window-Level Smooth Scroll */}
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            {/* Button 1 */}
-            <a 
-              href="#workspace"
-              onClick={(e) => scrollTo(e, "workspace")}
+            {/* Button 1: Explore Architecture */}
+            <button
+              onClick={(e) => handleSectionScroll(e, "workspace")}
               className="group relative flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold bg-primary text-white overflow-hidden transition-all hover:shadow-[0_0_25px_rgba(79,142,247,0.4)] active:scale-95 w-full sm:w-auto"
             >
               <Code2 className="w-4 h-4" />
               <span>Explore Architecture</span>
-            </a>
+            </button>
             
-            {/* Button 2 */}
-            <a 
-              href="#soc"
-              onClick={(e) => scrollTo(e, "soc")}
+            {/* Button 2: Cyber Defense Ops */}
+            <button
+              onClick={(e) => handleSectionScroll(e, "soc")}
               className="group flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold border border-border bg-surface/80 text-text-main transition-all hover:bg-card hover:border-text-muted active:scale-95 w-full sm:w-auto"
             >
               <ShieldCheck className="w-4 h-4 text-success" />
               <span>Cyber Defense Ops</span>
-            </a>
+            </button>
           </motion.div>
 
         </motion.div>
@@ -114,7 +108,7 @@ export default function Hero() {
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 0.8 }}
         className="relative z-10 pt-8 flex flex-col items-center gap-1.5 text-text-muted cursor-pointer hover:text-white transition-colors"
-        onClick={(e) => scrollTo(e, "about")}
+        onClick={(e) => handleSectionScroll(e, "about")}
       >
         <span className="text-[10px] font-mono tracking-widest uppercase opacity-60">System Flow</span>
         <motion.div 

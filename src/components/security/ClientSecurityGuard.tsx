@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShieldAlert, Terminal } from "lucide-react";
+import { ShieldAlert } from "lucide-react";
 
 export default function ClientSecurityGuard() {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -13,86 +13,106 @@ export default function ClientSecurityGuard() {
     if (typeof window !== "undefined") {
       console.clear();
       console.log(
-        "%c[!] RAHULOS CLIENT DEFENSE MATRIX ACTIVE%c\nOperator: Rahul Boudh | EC-Council CEH Validated\nNotice: Source inspection, DOM tampering, and extraction tools are restricted by security policy.",
-        "color: #4F8EF7; font-size: 14px; font-weight: bold; background: #08090A; padding: 6px 10px; border-radius: 4px; border: 1px solid #4F8EF7;",
-        "color: #23D18B; font-size: 12px; font-family: monospace; padding-top: 6px;"
+        "%c[!] RAHULOS CLIENT DEFENSE ACTIVE%c\nOperator: Rahul Boudh | EC-Council CEH Validated\nNotice: Client-side tampering and source extraction are restricted by policy.",
+        "color: #4F8EF7; font-size: 13px; font-weight: bold; background: #08090A; padding: 6px 10px; border-radius: 4px; border: 1px solid #4F8EF7;",
+        "color: #23D18B; font-size: 11px; font-family: monospace; padding-top: 6px;"
       );
     }
   };
 
-  // Auto-dismiss alert after 3 seconds
   useEffect(() => {
     if (!alertMessage) return;
-    const timer = setTimeout(() => setAlertMessage(null), 3200);
+    const timer = setTimeout(() => setAlertMessage(null), 3000);
     return () => clearTimeout(timer);
   }, [alertMessage]);
 
   useEffect(() => {
-    // 1. Log Console Banner on initial load
+    // 1. Initial Console Watermark
     console.clear();
     console.log(
-      "%c[RAHULOS SECURITY INITIALIZED] Terminal monitoring active.",
+      "%c[RAHULOS SECURITY MATRIX] Terminal monitoring active.",
       "color: #4F8EF7; font-family: monospace; font-size: 12px; font-weight: bold;"
     );
 
     // 2. Disable Right-Click Context Menu
     const handleContextMenu = (e: MouseEvent) => {
+      // Allow right-click on input fields and textareas for accessibility
+      const target = e.target as HTMLElement;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) {
+        return;
+      }
       e.preventDefault();
-      triggerSecurityAlert("Context Menu Restricted: Right-click is disabled by client security policy.");
+      triggerSecurityAlert("Context Menu Restricted: Right-click is disabled.");
     };
 
-    // 3. Block Developer Key Combinations
+    // 3. Prevent Drag & Drop Extraction of Images/Links
+    const handleDragStart = (e: DragEvent) => {
+      const target = e.target as HTMLElement;
+      if (target && (target.tagName === "IMG" || target.tagName === "A")) {
+        e.preventDefault();
+      }
+    };
+
+    // 4. Intercept DevTools Hotkeys
     const handleKeyDown = (e: KeyboardEvent) => {
       const isCtrlOrCmd = e.ctrlKey || e.metaKey;
       const key = e.key.toLowerCase();
 
-      // F12 (DevTools)
+      // F12
       if (e.key === "F12") {
         e.preventDefault();
-        triggerSecurityAlert("Action Intercepted: F12 DevTools access restricted.");
+        triggerSecurityAlert("Action Blocked: F12 DevTools launch intercepted.");
         return;
       }
 
-      // Ctrl+Shift+I (Inspect), Ctrl+Shift+J (Console), Ctrl+Shift+C (Element Picker)
+      // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
       if (isCtrlOrCmd && e.shiftKey && (key === "i" || key === "j" || key === "c")) {
         e.preventDefault();
-        triggerSecurityAlert("Action Intercepted: Developer inspection hotkey denied.");
+        triggerSecurityAlert("Action Blocked: Developer inspection hotkey intercepted.");
         return;
       }
 
-      // Ctrl+U (View Page Source)
+      // Ctrl+U (View Source)
       if (isCtrlOrCmd && key === "u") {
         e.preventDefault();
-        triggerSecurityAlert("Action Intercepted: Direct View-Source shortcut denied.");
+        triggerSecurityAlert("Action Blocked: View Source command denied.");
         return;
       }
 
-      // Ctrl+S (Save Page HTML)
+      // Ctrl+S (Save Page)
       if (isCtrlOrCmd && key === "s") {
         e.preventDefault();
-        triggerSecurityAlert("Action Intercepted: Payload extraction denied.");
+        triggerSecurityAlert("Action Blocked: Payload extraction denied.");
         return;
       }
     };
 
-    // 4. Anti-Debugger Trap (triggers if an external tool opens DevTools)
-    const antiDebugger = setInterval(() => {
-      const start = performance.now();
-      // eslint-disable-next-line no-debugger
-      debugger;
-      const end = performance.now();
-      if (end - start > 100) {
-        triggerSecurityAlert("Anti-Debugger Trap Triggered: Execution paused.");
+    // 5. Non-Aggressive DevTools Docked Resize Detection
+    const handleResize = () => {
+      // Standard threshold delta for opened docked DevTools
+      const threshold = 180;
+      const widthDiff = window.outerWidth - window.innerWidth;
+      const heightDiff = window.outerHeight - window.innerHeight;
+
+      if (window.outerWidth > 600 && (widthDiff > threshold || heightDiff > threshold)) {
+        console.clear();
+        console.log(
+          "%c[SECURITY AUDIT] DevTools inspection dock detected.",
+          "color: #FF5C5C; font-size: 12px; font-weight: bold;"
+        );
       }
-    }, 2000);
+    };
 
     document.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("dragstart", handleDragStart);
     window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("resize", handleResize);
 
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("dragstart", handleDragStart);
       window.removeEventListener("keydown", handleKeyDown);
-      clearInterval(antiDebugger);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
