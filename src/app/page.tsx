@@ -6,7 +6,6 @@ import SOC from "@/components/sections/SOC";
 import Projects from "@/components/sections/Projects";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
-import Resume from "@/components/sections/Resume"; // 👈 Imported
 import Contact from "@/components/sections/Contact";
 
 export default function Home() {
@@ -19,7 +18,6 @@ export default function Home() {
       <Projects />
       <Skills />
       <Experience />
-      <Resume /> {/* 👈 Injected here */}
       <Contact />
     </div>
   );

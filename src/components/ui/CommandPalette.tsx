@@ -40,7 +40,7 @@ export default function CommandPalette() {
     { id: "about", name: "About Me", icon: <User className="w-4 h-4" />, action: () => router.push("#about") },
     { id: "dev", name: "Developer Workspace", icon: <Code2 className="w-4 h-4" />, action: () => router.push("#workspace") },
     { id: "soc", name: "Cyber Defense Center", icon: <Shield className="w-4 h-4" />, action: () => router.push("#soc") },
-    { id: "resume", name: "Download Resume", icon: <FileText className="w-4 h-4" />, action: () => window.open("/resume.pdf", "_blank") },
+    { id: "resume", name: "View / Download ATS Resume", icon: <FileText className="w-4 h-4" />, action: () => router.push("/resume") },
     { id: "contact", name: "Contact", icon: <Mail className="w-4 h-4" />, action: () => router.push("#contact") },
   ];
 
