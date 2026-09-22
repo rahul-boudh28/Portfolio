@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   // This MUST match your GitHub repository name exactly
   basePath: "/Portfolio",
   assetPrefix: "/Portfolio/",
+  productionBrowserSourceMaps: false,
 };
 
 export default nextConfig;

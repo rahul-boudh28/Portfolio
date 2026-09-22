@@ -2,42 +2,65 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ShieldAlert, Activity, Lock, AlertTriangle, Crosshair, Server, RefreshCw } from "lucide-react";
+import { ShieldAlert, Activity, Lock, AlertTriangle, Crosshair, Server, RefreshCw, Radio, CheckCircle2, UserCheck } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function SOC() {
   const [mounted, setMounted] = useState(false);
+  const [clientIp, setClientIp] = useState<string>("Detecting origin IP...");
   const [isScanning, setIsScanning] = useState(false);
   const [logEvents, setLogEvents] = useState([
     { id: 1, time: "18:42:01", type: "INFO", message: "User Activity Logger active on Node-Alpha." },
-    { id: 2, time: "18:43:15", type: "WARN", message: "Traffic anomaly on Port 443 safely filtered." },
-    { id: 3, time: "18:45:22", type: "SECURE", message: "Automated vulnerability scan completed. 0 threats." },
+    { id: 2, time: "18:43:15", type: "WARN", message: "Traffic anomaly on Port 443 safely mitigated." },
+    { id: 3, time: "18:45:22", type: "SECURE", message: "Automated vulnerability assessment complete. 0 threats." },
   ]);
 
+  // Fetch real visitor IP (free, secure CORS endpoint)
   useEffect(() => {
     setMounted(true);
+
+    fetch("https://api.ipify.org?format=json")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.ip) {
+          setClientIp(data.ip);
+          // Inject real client IP into the SOC telemetry stream
+          setLogEvents((prev) => [
+            {
+              id: Date.now(),
+              time: new Date().toLocaleTimeString("en-GB"),
+              type: "CLIENT",
+              message: `Inbound handshake established from ${data.ip} (Verified Visitor).`,
+            },
+            ...prev.slice(0, 4),
+          ]);
+        }
+      })
+      .catch(() => {
+        setClientIp("127.0.0.1 (Masked via Proxy)");
+      });
   }, []);
 
   const triggerScan = () => {
     setIsScanning(true);
-    const newLog = {
+    const scanLog = {
       id: Date.now(),
       time: new Date().toLocaleTimeString("en-GB"),
       type: "SCAN",
-      message: "Tactical host penetration probe initiated across all endpoints.",
+      message: `Running tactical vulnerability scan against client node: ${clientIp}...`,
     };
-    setLogEvents(prev => [newLog, ...prev.slice(0, 4)]);
+    setLogEvents((prev) => [scanLog, ...prev.slice(0, 4)]);
 
     setTimeout(() => {
       setIsScanning(false);
-      setLogEvents(prev => [
+      setLogEvents((prev) => [
         {
           id: Date.now() + 1,
           time: new Date().toLocaleTimeString("en-GB"),
           type: "SECURE",
-          message: "Probe completed: Zero privilege escalations detected.",
+          message: `Zero privilege escalations detected for node [${clientIp}]. Host clear.`,
         },
-        ...prev.slice(0, 4)
+        ...prev.slice(0, 4),
       ]);
     }, 1800);
   };
@@ -49,7 +72,7 @@ export default function SOC() {
       <div className="max-w-[1200px] mx-auto px-6 relative z-10">
         
         {/* Header */}
-        <div className="mb-12 flex flex-col items-center text-center">
+        <div className="mb-8 flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-surface mb-4">
             <ShieldAlert className="w-4 h-4 text-success" />
             <span className="text-xs font-mono font-bold text-success uppercase">Module 02: Cyber Defense Center</span>
@@ -60,7 +83,32 @@ export default function SOC() {
           </p>
         </div>
 
-        {/* Dashboard Grid */}
+        {/* 🟢 DYNAMIC CLIENT IP WELCOME HUD 🟢 */}
+        <div className="mb-8 p-4 sm:p-5 rounded-2xl border border-primary/40 bg-gradient-to-r from-primary/10 via-surface to-surface/60 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_0_25px_rgba(79,142,247,0.1)]">
+          <div className="flex items-center gap-3 text-center sm:text-left">
+            <div className="p-2.5 rounded-xl bg-primary/20 border border-primary/40 text-primary shrink-0">
+              <UserCheck className="w-5 h-5 animate-pulse" />
+            </div>
+            <div>
+              <div className="flex items-center justify-center sm:justify-start gap-2">
+                <span className="h-2 w-2 rounded-full bg-success shadow-[0_0_8px_var(--color-success)] animate-ping" />
+                <span className="text-[11px] font-mono text-primary uppercase font-bold tracking-wider">
+                  Visitor Connection Identified
+                </span>
+              </div>
+              <p className="text-sm sm:text-base font-mono text-text-main mt-0.5">
+                User on <strong className="text-success underline decoration-success/50 font-bold tracking-wide">{clientIp}</strong> — thank you for visiting me!
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface border border-border text-xs font-mono text-text-muted shrink-0">
+            <Radio className="w-3.5 h-3.5 text-success animate-pulse" />
+            <span>ENCRYPTED_SESSION</span>
+          </div>
+        </div>
+
+        {/* SOC Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
           {/* Radar Column */}
@@ -76,7 +124,7 @@ export default function SOC() {
                 className="flex items-center gap-1.5 px-3 py-1 rounded bg-surface border border-border hover:border-primary text-xs font-mono text-text-muted hover:text-white transition-all disabled:opacity-50"
               >
                 <RefreshCw className={`w-3 h-3 ${isScanning ? "animate-spin text-primary" : ""}`} />
-                <span>{isScanning ? "Probing Grid..." : "Run Security Assessment"}</span>
+                <span>{isScanning ? "Auditing Node..." : "Run Security Assessment"}</span>
               </button>
             </div>
             
@@ -86,14 +134,14 @@ export default function SOC() {
               <div className="absolute w-[260px] h-[260px] rounded-full border border-primary/20" />
               <div className="absolute w-[160px] h-[160px] rounded-full border border-primary/20" />
               
-              {/* Sweeping Line */}
+              {/* Sweeping Radar Needle */}
               <motion.div 
                 className="absolute w-[180px] h-[180px] origin-bottom-right bg-gradient-to-tr from-primary/30 to-transparent right-1/2 bottom-1/2 rounded-tl-full"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
               />
 
-              {/* Nodes */}
+              {/* Active Network Nodes */}
               <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-success rounded-full shadow-[0_0_12px_var(--color-success)]" />
               <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-success rounded-full shadow-[0_0_12px_var(--color-success)]" />
               <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-primary rounded-full shadow-[0_0_12px_var(--color-primary)]" />
@@ -102,25 +150,25 @@ export default function SOC() {
             </div>
           </div>
 
-          {/* Metrics Column */}
+          {/* Metrics & Threat Stream Column */}
           <div className="flex flex-col gap-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-xl border border-border bg-surface/50">
                 <Activity className="w-5 h-5 text-primary mb-2" />
                 <div className="text-2xl font-bold font-mono">99.99%</div>
-                <div className="text-[10px] text-text-muted font-mono uppercase">Cluster Uptime</div>
+                <div className="text-[10px] text-text-muted font-mono uppercase">Perimeter Uptime</div>
               </div>
               <div className="p-4 rounded-xl border border-border bg-surface/50">
                 <Lock className="w-5 h-5 text-success mb-2" />
                 <div className="text-2xl font-bold font-mono">0</div>
-                <div className="text-[10px] text-text-muted font-mono uppercase">Vulnerabilities</div>
+                <div className="text-[10px] text-text-muted font-mono uppercase">Threats Detected</div>
               </div>
             </div>
 
-            {/* Live Logs */}
+            {/* Live Threat Logs (Featuring real IP) */}
             <div className="flex-1 rounded-2xl border border-border bg-surface/40 p-5 flex flex-col">
               <h3 className="font-bold flex items-center gap-2 mb-3 text-xs font-mono text-text-muted uppercase">
-                <AlertTriangle className="w-3.5 h-3.5 text-warning" /> Live Threat Audit Stream
+                <AlertTriangle className="w-3.5 h-3.5 text-warning" /> Live Security Audit Stream
               </h3>
               
               <div className="flex-1 flex flex-col gap-2 font-mono text-xs">
@@ -130,7 +178,15 @@ export default function SOC() {
                     className="flex items-start gap-2 p-2 rounded bg-card/60 border border-border/70"
                   >
                     <span className="text-text-muted shrink-0 text-[10px]">[{log.time}]</span>
-                    <span className={`shrink-0 text-[10px] font-bold ${log.type === "WARN" ? "text-warning" : log.type === "SCAN" ? "text-primary" : "text-success"}`}>
+                    <span className={`shrink-0 text-[10px] font-bold ${
+                      log.type === "WARN" 
+                        ? "text-warning" 
+                        : log.type === "SCAN" 
+                        ? "text-primary" 
+                        : log.type === "CLIENT"
+                        ? "text-cyan-400 font-extrabold"
+                        : "text-success"
+                    }`}>
                       {log.type}
                     </span>
                     <span className="text-text-main text-[11px] truncate">{log.message}</span>

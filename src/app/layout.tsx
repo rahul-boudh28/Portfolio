@@ -157,6 +157,27 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
+        {/* Raw Source Security Easter Egg for view-source */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+/*
+ ====================================================================
+  [!] RAHULOS SECURITY PROTOCOL ACTIVE
+ ====================================================================
+  Operator: Rahul Boudh (Certified Ethical Hacker / Software Developer)
+  Target Host: https://rahul-boudh28.github.io/Portfolio/
+  Clearance: EC-Council CEH Validated
+  Status: Client Hardened • Source Minified • Secrets Sanitized
+ ====================================================================
+  Notice: This static bundle is public by design. All backend business
+  logic, proprietary bots, and sensitive endpoints are safeguarded
+  behind strict perimeter access controls.
+ ====================================================================
+*/
+            `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
