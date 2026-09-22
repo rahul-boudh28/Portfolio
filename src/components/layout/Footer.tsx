@@ -1,7 +1,7 @@
 // src/components/layout/Footer.tsx
 "use client";
 
-import { Code2, Globe, Mail, Terminal, ShieldCheck } from "lucide-react";
+import { Code2, Globe, Mail, Terminal, ShieldCheck, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Footer() {
@@ -14,8 +14,10 @@ export default function Footer() {
   if (!mounted) return null;
 
   return (
-    <footer className="w-full border-t border-border py-12 bg-[#060709] text-text-muted no-print" 
-      style={{ borderColor: 'var(--color-border)' }}>
+    <footer 
+      className="w-full border-t border-border py-12 bg-[#060709] text-text-muted no-print relative z-20"
+      style={{ borderColor: "var(--color-border)" }}
+    >
       <div className="max-w-[1440px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
         
         {/* Brand & Version Badge */}
@@ -36,20 +38,54 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <p className="text-xs font-medium text-text-muted/70">
-          © {new Date().getFullYear()} Rahul Boudh. Built with Next.js App Router, Tailwind CSS & R3F.
+        <p className="text-xs font-medium text-text-muted/70 text-center">
+          © {new Date().getFullYear()} Rahul Boudh. All rights reserved.
         </p>
 
-        {/* Social / Direct Channels */}
-        <div className="flex items-center gap-4">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-surface border border-border hover:border-text-muted hover:text-white transition-colors" aria-label="GitHub">
-            <Code2 className="w-4 h-4" />
+        {/* Verified Social & Direct Contact Links */}
+        <div className="flex items-center gap-3 relative z-30 pointer-events-auto">
+          {/* 1. Verified Email (mailto) */}
+          <a 
+            href="mailto:rahuldboudh@gmail.com" 
+            className="p-2.5 rounded-xl bg-surface border border-border hover:border-primary text-text-muted hover:text-primary transition-all cursor-pointer shadow-sm group" 
+            aria-label="Send Email to rahuldboudh@gmail.com"
+            title="Email: rahuldboudh@gmail.com"
+          >
+            <Mail className="w-4 h-4 group-hover:scale-110 transition-transform" />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-surface border border-border hover:border-text-muted hover:text-white transition-colors" aria-label="LinkedIn">
-            <Globe className="w-4 h-4" />
+
+          {/* 2. Verified Phone (tel) */}
+          <a 
+            href="tel:+917400329443" 
+            className="p-2.5 rounded-xl bg-surface border border-border hover:border-success text-text-muted hover:text-success transition-all cursor-pointer shadow-sm group" 
+            aria-label="Call +91 7400329443"
+            title="Call: +91 7400329443"
+          >
+            <Phone className="w-4 h-4 group-hover:scale-110 transition-transform" />
           </a>
-          <a href="mailto:rahuldboudh@gmail.com" className="p-2 rounded-lg bg-surface border border-border hover:border-text-muted hover:text-white transition-colors" aria-label="Email">
-            <Mail className="w-4 h-4" />
+
+          {/* 3. Verified GitHub Profile */}
+          <a 
+            href="https://github.com/rahul-boudh28" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="p-2.5 rounded-xl bg-surface border border-border hover:border-white text-text-muted hover:text-white transition-all cursor-pointer shadow-sm group" 
+            aria-label="GitHub Profile (rahul-boudh28)"
+            title="GitHub: rahul-boudh28"
+          >
+            <Code2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+          </a>
+
+          {/* 4. Verified LinkedIn Profile */}
+          <a 
+            href="https://www.linkedin.com/in/rahul-boudh" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="p-2.5 rounded-xl bg-surface border border-border hover:border-primary text-text-muted hover:text-primary transition-all cursor-pointer shadow-sm group" 
+            aria-label="LinkedIn Profile"
+            title="LinkedIn Profile"
+          >
+            <Globe className="w-4 h-4 group-hover:scale-110 transition-transform" />
           </a>
         </div>
 
